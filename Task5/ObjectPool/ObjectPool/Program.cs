@@ -6,15 +6,17 @@ namespace ObjectPool
     {
         public static void Main(string[] args)
         {
-            var pool = new Pool();
+            var pool = Pool.Instance;
 
-            pool.SetMaxSize(2);
+            pool.SetMaxSize(1);
 
             var obj1 = pool.GetObject();
-            var obj2 = pool.GetObject();
-            var obj3 = pool.GetObject();
+            var obj2 = pool.GetObject();            
 
             pool.ReturnObject(obj2);
+
+            var obj3 = pool.GetObject();
+            
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿   using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,18 +8,19 @@ namespace ObjectPool
 {
     public class Pool
     {
-       
-        private int _counter = 0;
+        private static Pool instance;
         private int _maxSize = 5;
 
         private readonly List<Item> objectsAvailable = new List<Item>();
         private readonly List<Item> objectsNonAvailable = new List<Item>();
 
+        public static Pool Instance => instance ?? (instance = new Pool());
+
         public void SetMaxSize(int size)
         {
             _maxSize = size;
         }
-
+                                                                       
         public Item GetObject()
         {
             if(objectsAvailable.Count > 0)
@@ -28,14 +29,12 @@ namespace ObjectPool
                 objectsAvailable.RemoveAt(0);
                 objectsNonAvailable.Add(obj);
                 Console.WriteLine("Object pulled.");
-                _counter--;
                 return obj;
             }
             else
             {
                 Item obj = new Item();
                 objectsNonAvailable.Add(obj);
-                _counter++;
                 Console.WriteLine("New object created and pulled.");
                 return obj;
             }
@@ -43,10 +42,9 @@ namespace ObjectPool
 
         public void ReturnObject(Item obj)
         {
-            if (_counter < _maxSize)
+            if (objectsAvailable.Count < _maxSize)
             {
                 objectsAvailable.Add(obj);
-                _counter++;
                 Console.WriteLine("Object returned.");
             }
             else
